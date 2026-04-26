@@ -1,0 +1,19 @@
+{
+  "key.category.minecraft.spear-boost": "Spear Boost",
+
+  "key.spear_boost.boost": "Impulso de lança",
+  "key.spear_boost.open_config": "Configurações do Spear Boost",
+
+  "screen.spear_boost.subtitle": "Configurar velocidade do impulso",
+  "screen.spear_boost.close": "Fechar",
+  "screen.spear_boost.author": "Autor: portal_gum",
+
+  "slider.spear_boost.interval": "Intervalo do impulso: %s ticks",
+  "slider.spear_boost.delay": "Atraso antes do ataque: %s ticks",
+
+  "warning.spear_boost.lag": "ℹ Altere apenas se o servidor estiver com lag",
+  "warning.spear_boost.low": "⚠ Não use menos de 5 (pode falhar)",
+
+  "error.spear_boost.nolunge": "Você precisa de uma lança com o encantamento \"Estocada\"",
+  "error.spear_boost.noslots": "Nenhum slot adequado encontrado"
+}

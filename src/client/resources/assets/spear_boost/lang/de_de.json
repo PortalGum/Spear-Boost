@@ -1,0 +1,19 @@
+{
+  "key.category.minecraft.spear-boost": "Spear Boost",
+
+  "key.spear_boost.boost": "Speer-Boost",
+  "key.spear_boost.open_config": "Spear Boost Einstellungen",
+
+  "screen.spear_boost.subtitle": "Geschwindigkeit des Speer-Boosts einstellen",
+  "screen.spear_boost.close": "Schließen",
+  "screen.spear_boost.author": "Autor: portal_gum",
+
+  "slider.spear_boost.interval": "Boost-Intervall: %s Ticks",
+  "slider.spear_boost.delay": "Verzögerung vor Angriff: %s Ticks",
+
+  "warning.spear_boost.lag": "ℹ Nur ändern, wenn der Server laggt",
+  "warning.spear_boost.low": "⚠ Nicht unter 5 setzen (kann fehlschlagen)",
+
+  "error.spear_boost.nolunge": "Du brauchst einen Speer mit der \"Ausfallschritt\"-Verzauberung",
+  "error.spear_boost.noslots": "Kein geeigneter Slot gefunden"
+}

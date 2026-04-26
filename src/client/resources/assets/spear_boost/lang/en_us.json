@@ -1,0 +1,19 @@
+{
+  "key.category.minecraft.spear-boost": "Spear Boost",
+
+  "key.spear_boost.boost": "Spear Boost",
+  "key.spear_boost.open_config": "Spear Boost Settings",
+
+  "screen.spear_boost.subtitle": "Configure spear boost speed",
+  "screen.spear_boost.close": "Close",
+  "screen.spear_boost.author": "Author: portal_gum",
+
+  "slider.spear_boost.interval": "Boost interval: %s ticks",
+  "slider.spear_boost.delay": "Delay before hit: %s ticks",
+
+  "warning.spear_boost.lag": "ℹ Change only if the server is lagging",
+  "warning.spear_boost.low": "⚠ Do not set below 5 (may fail to boost)",
+
+  "error.spear_boost.nolunge": "You need a spear with the \"Lunge\" enchantment",
+  "error.spear_boost.noslots": "No suitable slot found"
+}

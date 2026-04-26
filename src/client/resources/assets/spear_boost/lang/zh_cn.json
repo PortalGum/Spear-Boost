@@ -1,0 +1,19 @@
+{
+  "key.category.minecraft.spear-boost": "Spear Boost",
+
+  "key.spear_boost.boost": "长矛冲刺",
+  "key.spear_boost.open_config": "Spear Boost 设置",
+
+  "screen.spear_boost.subtitle": "设置长矛加速速度",
+  "screen.spear_boost.close": "关闭",
+  "screen.spear_boost.author": "作者: portal_gum",
+
+  "slider.spear_boost.interval": "加速间隔: %s tick",
+  "slider.spear_boost.delay": "攻击前延迟: %s tick",
+
+  "warning.spear_boost.lag": "ℹ 仅在服务器卡顿时修改",
+  "warning.spear_boost.low": "⚠ 不要低于5（可能无法生效）",
+
+  "error.spear_boost.nolunge": "你需要带有\"冲刺\"附魔的长矛",
+  "error.spear_boost.noslots": "没有可用的栏位"
+}

@@ -1,0 +1,19 @@
+{
+  "key.category.minecraft.spear-boost": "Spear Boost",
+
+  "key.spear_boost.boost": "Буст копья",
+  "key.spear_boost.open_config": "Настройки Spear Boost",
+
+  "screen.spear_boost.subtitle": "Настройка скорости буста копья",
+  "screen.spear_boost.close": "Закрыть",
+  "screen.spear_boost.author": "Автор: portal_gum",
+
+  "slider.spear_boost.interval": "Интервал буста: %s тиков",
+  "slider.spear_boost.delay": "Задержка перед ударом: %s тиков",
+
+  "warning.spear_boost.lag": "ℹ Меняйте только если сервер сильно лагает",
+  "warning.spear_boost.low": "⚠ Не ставьте значение меньше 5 (может не успевать бустить)",
+
+  "error.spear_boost.nolunge": "Нужно копьё с зачарованием \"Рывок\" ",
+  "error.spear_boost.noslots": "Нет подходящего слота"
+}

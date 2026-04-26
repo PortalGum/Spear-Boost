@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.spear_boost.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MinecraftClientInvoker"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
+
+
+
+

@@ -1,0 +1,19 @@
+{
+  "key.category.minecraft.spear-boost": "Spear Boost",
+
+  "key.spear_boost.boost": "Propulsion de lance",
+  "key.spear_boost.open_config": "Paramètres Spear Boost",
+
+  "screen.spear_boost.subtitle": "Configurer la vitesse du boost",
+  "screen.spear_boost.close": "Fermer",
+  "screen.spear_boost.author": "Auteur : portal_gum",
+
+  "slider.spear_boost.interval": "Intervalle du boost : %s ticks",
+  "slider.spear_boost.delay": "Délai avant attaque : %s ticks",
+
+  "warning.spear_boost.lag": "ℹ Modifier uniquement si le serveur lag",
+  "warning.spear_boost.low": "⚠ Ne pas mettre en dessous de 5 (peut échouer)",
+
+  "error.spear_boost.nolunge": "Vous avez besoin d'une lance avec l'enchantement \"Élan\"",
+  "error.spear_boost.noslots": "Aucun emplacement approprié"
+}
