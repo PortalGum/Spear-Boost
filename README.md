@@ -14,6 +14,10 @@ While holding a key, the mod:
 * repeats the dash mechanic
 * allows you to move forward at high speed
 
+
+<img width="400" height="225" alt="spear-boost_gif (1) (1) (1)" src="https://github.com/user-attachments/assets/53e63606-6dfa-47a0-bbab-acdac902034e" />
+
+
 👉 **≈ 41 blocks/sec** while holding the key
 
 ---
@@ -31,6 +35,9 @@ While holding a key, the mod:
 
 * Boost interval
 * Delay before hit
+
+<img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/ae467bfd-0665-4634-ba88-108cff815e8a" />
+
 
 (only needed to adjust for server/ping)
 
