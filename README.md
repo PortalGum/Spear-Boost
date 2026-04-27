@@ -1,6 +1,7 @@
 # Spear Boost (Fabric)
 
-![Fabric](https://img.shields.io/badge/Loader-Fabric-blue)  ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-green)
+![Fabric](https://img.shields.io/badge/Loader-Fabric-blue)  ![Client](https://img.shields.io/badge/Environment-Client-informational?logo=java)
+ ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-green)
 
 A small client-side mod that automates the **spear dash** mechanic (no-delay spear dash).
 
