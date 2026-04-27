@@ -1,4 +1,4 @@
-# Spear Boost (Fabric)
+# ⏏️ Spear Boost (Fabric)
 
 ![Fabric](https://img.shields.io/badge/Loader-Fabric-blue)  ![Client](https://img.shields.io/badge/Environment-Client-informational?logo=java)
  ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-green)
@@ -9,7 +9,7 @@ A small client-side mod that automates the **spear dash** mechanic (no-delay spe
 
 ---
 
-## What the mod does
+## 🤔 What the mod does
 
 While holding a key, the mod:
 
@@ -25,7 +25,7 @@ While holding a key, the mod:
 
 ---
 
-## Controls
+## 🔧 Controls
 
 | Action   | Key           |
 | -------- | ------------- |
@@ -34,7 +34,7 @@ While holding a key, the mod:
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 * Boost interval
 * Delay before hit
@@ -46,7 +46,7 @@ While holding a key, the mod:
 
 ---
 
-## Requirements
+## ❗ Requirements
 
 * A spear with **Lunge enchantment**
 * A free or “safe” hotbar slot
@@ -57,6 +57,6 @@ If these conditions are not met, the mod simply does nothing.
 
 ---
 
-## Note
+## 📍 Note
 
 This mod is not a **cheat** - it only automates an existing Minecraft mechanic.
