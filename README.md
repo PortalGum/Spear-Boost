@@ -27,7 +27,8 @@
 
 A small client-side mod that automates the **spear dash** mechanic (no-delay spear dash).
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/XgXdvVMviFA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://www.youtube-nocookie.com/embed/XgXdvVMviFA
+
 
 ---
 
