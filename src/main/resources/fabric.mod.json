@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "spear_boost",
+  "version": "${version}",
+
+  "name": "spear_boost",
+  "description": "This mod allows you to quickly dash with a spear by holding down one button.",
+  "authors": ["portal_gum"],
+  "contact": {},
+
+  "license": "MIT",
+  "icon": "assets/spear_boost/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.spear_boost.SpearBoostClient"
+    ]
+  },
+
+  "mixins": [
+    "spear_boost.mixins.json"
+    ,{
+      "config": "spear_boost.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "~26.1"
+  }
+}
+
+

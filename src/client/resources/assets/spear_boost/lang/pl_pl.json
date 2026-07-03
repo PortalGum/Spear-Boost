@@ -1,0 +1,19 @@
+{
+  "key.category.spear-boost.main": "Spear Boost",
+
+  "key.spear_boost.boost": "Przyspieszenie włócznią",
+  "key.spear_boost.open_config": "Ustawienia Spear Boost",
+
+  "screen.spear_boost.subtitle": "Ustaw prędkość przyspieszenia",
+  "screen.spear_boost.close": "Zamknij",
+  "screen.spear_boost.author": "Autor: portal_gum",
+
+  "slider.spear_boost.interval": "Interwał przyspieszenia: %s ticków",
+  "slider.spear_boost.delay": "Opóźnienie przed atakiem: %s ticków",
+
+  "warning.spear_boost.lag": "ℹ Zmieniaj tylko jeśli serwer laguje",
+  "warning.spear_boost.low": "⚠ Nie ustawiaj poniżej 5 (może nie działać)",
+
+  "error.spear_boost.nolunge": "Potrzebujesz włóczni z zaklęciem \"Pchnięcie\"",
+  "error.spear_boost.noslots": "Brak odpowiedniego slotu"
+}
