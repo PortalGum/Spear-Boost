@@ -1,7 +1,7 @@
 # ⏏️ Spear Boost (Fabric)
 
 ![Fabric](https://img.shields.io/badge/Loader-Fabric-blue)  ![Client](https://img.shields.io/badge/Environment-Client-informational?logo=java)
- ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-green)
+ ![Minecraft](https://img.shields.io/badge/Minecraft-26.1.2-green)
 
 > [!IMPORTANT]
 > **This mod does not work on Paper servers by default.**
