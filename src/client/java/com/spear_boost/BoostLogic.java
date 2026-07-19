@@ -66,7 +66,7 @@ public class BoostLogic {
         if (justPressed && phase == Phase.SAFE_SLOT) {
             // skip the safe-slot step on the very first tick after the key
             // was pressed so the spear hit happens right away instead of
-            // waiting a full boostInterval on an idle slot switch
+            // waiting a full boostInterval on an idle slot switchg
             phase = Phase.SPEAR_SLOT;
         }
 
