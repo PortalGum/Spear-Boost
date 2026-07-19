@@ -1,7 +1,5 @@
 package com.spear_boost;
 
-import com.spear_boost.mixin.MinecraftClientInvoker;
-
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,6 +23,7 @@ public class BoostLogic {
     private static int phaseTimer = 0;
     private static int cachedSafeSlot = -1;
     private static int cachedSpearSlot = -1;
+    private static boolean wasKeyDown = false;
 
     public static void tick(Minecraft client) {
         if (client.player == null) return;
@@ -32,8 +31,12 @@ public class BoostLogic {
 
         if (!KeyBinds.boostKey.isDown()) {
             reset();
+            wasKeyDown = false;
             return;
         }
+
+        boolean justPressed = !wasKeyDown;
+        wasKeyDown = true;
 
         if (phaseTimer > 0) {
             phaseTimer--;
@@ -58,6 +61,13 @@ public class BoostLogic {
             }
             reset();
             return;
+        }
+
+        if (justPressed && phase == Phase.SAFE_SLOT) {
+            // skip the safe-slot step on the very first tick after the key
+            // was pressed so the spear hit happens right away instead of
+            // waiting a full boostInterval on an idle slot switch
+            phase = Phase.SPEAR_SLOT;
         }
 
         switch (phase) {

@@ -25,7 +25,7 @@ public class KeyBinds {
         openConfigKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.spear_boost.open_config",
                 InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_O,
+                GLFW.GLFW_KEY_I,
                 CATEGORY
         ));
     }
