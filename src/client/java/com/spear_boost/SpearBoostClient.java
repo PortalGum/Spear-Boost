@@ -17,11 +17,9 @@ public class SpearBoostClient implements ClientModInitializer {
             // boost
             BoostLogic.tick(client);
 
-            // open settings
-            while (KeyBinds.openConfigKey.consumeClick()) {
-                if (client.gui != null) {
-                    client.gui.setScreen(new ConfigScreen());
-                }
+            // settings
+            while (KeyBinds.openConfigKey.wasPressed()) {
+                client.setScreen(new ConfigScreen());
             }
         });
     }

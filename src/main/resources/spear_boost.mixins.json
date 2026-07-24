@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.spear_boost.mixin",
-  "compatibilityLevel": "JAVA_25",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],
   "injectors": {

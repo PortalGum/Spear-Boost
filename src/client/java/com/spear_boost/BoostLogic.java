@@ -1,15 +1,17 @@
 package com.spear_boost;
 
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+import com.spear_boost.mixin.MinecraftClientInvoker;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.consume.UseAction;
+import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
+import net.minecraft.registry.Registries;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class BoostLogic {
 
@@ -20,16 +22,18 @@ public class BoostLogic {
     }
 
     private static Phase phase = Phase.SAFE_SLOT;
+
     private static int phaseTimer = 0;
+
     private static int cachedSafeSlot = -1;
     private static int cachedSpearSlot = -1;
     private static boolean wasKeyDown = false;
 
-    public static void tick(Minecraft client) {
+    public static void tick(MinecraftClient client) {
         if (client.player == null) return;
-        if (client.gameMode == null) return;
+        if (client.interactionManager == null) return;
 
-        if (!KeyBinds.boostKey.isDown()) {
+        if (!KeyBinds.boostKey.isPressed()) {
             reset();
             wasKeyDown = false;
             return;
@@ -43,22 +47,19 @@ public class BoostLogic {
             return;
         }
 
-        Inventory inv = client.player.getInventory();
+        PlayerInventory inv = client.player.getInventory();
 
-        cachedSpearSlot = findSpear(inv);
+        // update
+        cachedSpearSlot = findspear(inv);
         if (cachedSpearSlot == -1) {
-            if (client.gui != null && client.gui.hud != null) {
-                client.gui.hud.setOverlayMessage(Component.translatable("error.spear_boost.nolunge"), true);
-            }
+            client.player.sendMessage(Text.translatable("error.spear_boost.nolunge"), true);
             reset();
             return;
         }
 
         cachedSafeSlot = findSafeSlot(inv, cachedSpearSlot);
         if (cachedSafeSlot == -1) {
-            if (client.gui != null && client.gui.hud != null) {
-                client.gui.hud.setOverlayMessage(Component.translatable("error.spear_boost.noslots"), true);
-            }
+            client.player.sendMessage(Text.translatable("error.spear_boost.noslots"), true);
             reset();
             return;
         }
@@ -71,15 +72,25 @@ public class BoostLogic {
         }
 
         switch (phase) {
+
             case SAFE_SLOT -> {
                 inv.setSelectedSlot(cachedSafeSlot);
-                client.getConnection().send(new ServerboundSetCarriedItemPacket(inv.getSelectedSlot()));
+
+                client.getNetworkHandler().sendPacket(
+                        new UpdateSelectedSlotC2SPacket(inv.getSelectedSlot())
+                );
+
                 phaseTimer = Config.boostInterval;
                 phase = Phase.SPEAR_SLOT;
             }
+
             case SPEAR_SLOT -> {
                 inv.setSelectedSlot(cachedSpearSlot);
-                client.getConnection().send(new ServerboundSetCarriedItemPacket(inv.getSelectedSlot()));
+
+                client.getNetworkHandler().sendPacket(
+                        new UpdateSelectedSlotC2SPacket(inv.getSelectedSlot())
+                );
+
                 if (Config.delayBeforeHit <= 0) {
                     sendAttackPacket(client);
                     phase = Phase.SAFE_SLOT;
@@ -88,6 +99,7 @@ public class BoostLogic {
                     phase = Phase.HIT;
                 }
             }
+
             case HIT -> {
                 sendAttackPacket(client);
                 phase = Phase.SAFE_SLOT;
@@ -102,16 +114,21 @@ public class BoostLogic {
         cachedSpearSlot = -1;
     }
 
-    private static int findSpear(Inventory inv) {
+    private static int findspear(PlayerInventory inv) {
         for (int i = 0; i < 9; i++) {
-            ItemStack stack = inv.getItem(i);
+            ItemStack stack = inv.getStack(i);
             if (stack.isEmpty()) continue;
-            Identifier itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
+
+            Identifier itemId = Registries.ITEM.getId(stack.getItem());
+
+            // spears
             if (!itemId.getPath().endsWith("_spear")) continue;
 
-            var enchantments = stack.getEnchantments();
-            for (var entry : enchantments.entrySet()) {
-                Identifier enchId = entry.getKey().unwrapKey().get().identifier();
+            // check enchant lunge
+            var enchants = stack.getEnchantments().getEnchantments();
+
+            for (var entry : enchants) {
+                Identifier enchId = entry.getKey().get().getValue();
                 if (enchId.getPath().equals("lunge")) {
                     return i;
                 }
@@ -120,21 +137,25 @@ public class BoostLogic {
         return -1;
     }
 
-    private static int findSafeSlot(Inventory inv, int spearSlot) {
+    private static int findSafeSlot(PlayerInventory inv, int spearSlot) {
         int fallback = -1;
+
         for (int i = 0; i < 9; i++) {
             if (i == spearSlot) continue;
-            ItemStack stack = inv.getItem(i);
+
+            ItemStack stack = inv.getStack(i);
+
             if (stack.isEmpty()) return i;
 
-            if (stack.getComponents().has(DataComponents.FOOD)) continue;
-            if (stack.getUseAnimation() != ItemUseAnimation.NONE) continue;
+            if (stack.get(DataComponentTypes.FOOD) != null) continue;
+            if (stack.getUseAction() != UseAction.NONE) continue;
 
             // check attribute
-            var attributeModifiers = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
+            var attributeModifiers = stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+
             if (attributeModifiers != null) {
                 boolean hasAttackSpeed = attributeModifiers.modifiers().stream()
-                        .anyMatch(entry -> entry.attribute().equals(Attributes.ATTACK_SPEED));
+                        .anyMatch(entry -> entry.attribute().equals(EntityAttributes.ATTACK_SPEED));
 
                 if (hasAttackSpeed) {
                     continue;
@@ -143,17 +164,13 @@ public class BoostLogic {
 
             fallback = i;
         }
+
         return fallback;
     }
 
-
-    private static void sendAttackPacket(Minecraft client) {
+    private static void sendAttackPacket(MinecraftClient client) {
         if (client == null) return;
-        try {
-            Class<?> invokerClass = Class.forName("com.spear_boost.mixin.MinecraftClientInvoker");
-            invokerClass.getMethod("invokeStartAttack").invoke(invokerClass.cast(client));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        ((MinecraftClientInvoker) client).invokeDoAttack();
     }
 }
