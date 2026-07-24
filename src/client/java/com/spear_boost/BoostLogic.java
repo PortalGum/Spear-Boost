@@ -1,5 +1,7 @@
 package com.spear_boost;
 
+import com.spear_boost.mixin.MinecraftClientInvoker;
+
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -47,8 +49,8 @@ public class BoostLogic {
 
         cachedSpearSlot = findSpear(inv);
         if (cachedSpearSlot == -1) {
-            if (client.gui != null && client.gui.hud != null) {
-                client.gui.hud.setOverlayMessage(Component.translatable("error.spear_boost.nolunge"), true);
+            if (client.gui != null) {
+                client.gui.setOverlayMessage(Component.translatable("error.spear_boost.nolunge"), true);
             }
             reset();
             return;
@@ -56,8 +58,8 @@ public class BoostLogic {
 
         cachedSafeSlot = findSafeSlot(inv, cachedSpearSlot);
         if (cachedSafeSlot == -1) {
-            if (client.gui != null && client.gui.hud != null) {
-                client.gui.hud.setOverlayMessage(Component.translatable("error.spear_boost.noslots"), true);
+            if (client.gui != null) {
+                client.gui.setOverlayMessage(Component.translatable("error.spear_boost.noslots"), true);
             }
             reset();
             return;
@@ -149,11 +151,6 @@ public class BoostLogic {
 
     private static void sendAttackPacket(Minecraft client) {
         if (client == null) return;
-        try {
-            Class<?> invokerClass = Class.forName("com.spear_boost.mixin.MinecraftClientInvoker");
-            invokerClass.getMethod("invokeStartAttack").invoke(invokerClass.cast(client));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ((MinecraftClientInvoker) client).invokeStartAttack();
     }
 }

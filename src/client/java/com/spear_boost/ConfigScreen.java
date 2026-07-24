@@ -55,7 +55,7 @@ public class ConfigScreen extends Screen {
 
         addRenderableWidget(Button.builder(
                 Component.translatable("screen.spear_boost.close"),
-                button -> this.onClose()
+                button -> this.minecraft.setScreen(null)
         ).bounds(centerX - 100, startY + 85, 200, 20).build());
 
         updateResetButtons();
