@@ -52,8 +52,8 @@ While holding a key, the mod:
 
 | Action   | Key           |
 | -------- | ------------- |
-| Boost    | `I` (default) |
-| Settings | `O` (default) |
+| Boost    | `X` (default) |
+| Settings | `I` (default) |
 
 ---
 
