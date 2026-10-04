@@ -25,6 +25,7 @@ public class BoostLogic {
     private static int phaseTimer = 0;
     private static int cachedSafeSlot = -1;
     private static int cachedSpearSlot = -1;
+    private static int cachedReturnSlot = -1;
     private static boolean wasKeyDown = false;
 
     public static void tick(Minecraft client) {
@@ -39,6 +40,10 @@ public class BoostLogic {
 
         boolean justPressed = !wasKeyDown;
         wasKeyDown = true;
+
+        if (justPressed) {
+            cachedReturnSlot = client.player.getInventory().getSelectedSlot();
+        }
 
         if (phaseTimer > 0) {
             phaseTimer--;
@@ -65,6 +70,13 @@ public class BoostLogic {
             return;
         }
 
+        if (justPressed) {
+            if (!isSafeSlot(inv, cachedReturnSlot, cachedSpearSlot)) {
+                cachedReturnSlot = cachedSafeSlot;
+            }
+        }
+
+
         if (justPressed && phase == Phase.SAFE_SLOT) {
             // skip the safe-slot step on the very first tick after the key
             // was pressed so the spear hit happens right away instead of
@@ -81,10 +93,13 @@ public class BoostLogic {
             }
             case SPEAR_SLOT -> {
                 inv.setSelectedSlot(cachedSpearSlot);
-                client.getConnection().send(new ServerboundSetCarriedItemPacket(inv.getSelectedSlot()));
+                client.getConnection().send(
+                        new ServerboundSetCarriedItemPacket(cachedSpearSlot)
+                );
+
                 if (Config.delayBeforeHit <= 0) {
                     sendAttackPacket(client);
-                    phase = Phase.SAFE_SLOT;
+                    phase = Phase.HIT;
                 } else {
                     phaseTimer = Config.delayBeforeHit;
                     phase = Phase.HIT;
@@ -92,7 +107,16 @@ public class BoostLogic {
             }
             case HIT -> {
                 sendAttackPacket(client);
-                phase = Phase.SAFE_SLOT;
+
+                if (cachedReturnSlot != -1) {
+                    inv.setSelectedSlot(cachedReturnSlot);
+                    client.getConnection().send(
+                            new ServerboundSetCarriedItemPacket(cachedReturnSlot)
+                    );
+                }
+
+                phaseTimer = Config.boostInterval;
+                phase = Phase.SPEAR_SLOT;
             }
         }
     }
@@ -102,6 +126,7 @@ public class BoostLogic {
         phaseTimer = 0;
         cachedSafeSlot = -1;
         cachedSpearSlot = -1;
+        cachedReturnSlot = -1;
     }
 
     private static int findSpear(Inventory inv) {
@@ -148,6 +173,35 @@ public class BoostLogic {
         return fallback;
     }
 
+    private static boolean isSafeSlot(Inventory inv, int slot, int spearSlot) {
+        if (slot < 0 || slot > 8) return false;
+        if (slot == spearSlot) return false;
+
+        ItemStack stack = inv.getItem(slot);
+
+        if (stack.isEmpty()) return true;
+
+        if (stack.getComponents().has(DataComponents.FOOD)) {
+            return false;
+        }
+
+        if (stack.getUseAnimation() != ItemUseAnimation.NONE) {
+            return false;
+        }
+
+        var attributeModifiers = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
+
+        if (attributeModifiers != null) {
+            boolean hasAttackSpeed = attributeModifiers.modifiers().stream()
+                    .anyMatch(entry -> entry.attribute().equals(Attributes.ATTACK_SPEED));
+
+            if (hasAttackSpeed) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private static void sendAttackPacket(Minecraft client) {
         if (client == null) return;
