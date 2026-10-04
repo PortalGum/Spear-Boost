@@ -6,6 +6,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.net.URI;
+
 public class ConfigScreen extends Screen {
 
     private static final int DEFAULT_BOOST_INTERVAL = 5;
@@ -128,14 +130,12 @@ public class ConfigScreen extends Screen {
         if (mouseX >= authorX && mouseX <= authorX + authorWidth &&
                 mouseY >= authorY && mouseY <= authorY + authorHeight) {
 
-            net.minecraft.util.Util.getPlatform().openUri("https://github.com/PortalGum");
+            com.mojang.blaze3d.Blaze3D.openUri(URI.create("https://github.com/PortalGum"));
             return true;
         }
 
         return super.mouseClicked(event, doubled);
     }
-
-
 
     // sliders
 
