@@ -12,6 +12,7 @@ import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.component.type.AttributeModifiersComponent;
 
 public class BoostLogic {
 
@@ -27,6 +28,7 @@ public class BoostLogic {
 
     private static int cachedSafeSlot = -1;
     private static int cachedSpearSlot = -1;
+    private static int cachedReturnSlot = -1;
     private static boolean wasKeyDown = false;
 
     public static void tick(MinecraftClient client) {
@@ -41,6 +43,10 @@ public class BoostLogic {
 
         boolean justPressed = !wasKeyDown;
         wasKeyDown = true;
+
+        if (justPressed) {
+            cachedReturnSlot = client.player.getInventory().getSelectedSlot();
+        }
 
         if (phaseTimer > 0) {
             phaseTimer--;
@@ -64,6 +70,12 @@ public class BoostLogic {
             return;
         }
 
+        if (justPressed) {
+            if (!isSafeSlot(inv, cachedReturnSlot, cachedSpearSlot)) {
+                cachedReturnSlot = cachedSafeSlot;
+            }
+        }
+
         if (justPressed && phase == Phase.SAFE_SLOT) {
             // skip the safe-slot step on the very first tick after the key
             // was pressed so the spear hit happens right away instead of
@@ -72,37 +84,38 @@ public class BoostLogic {
         }
 
         switch (phase) {
-
             case SAFE_SLOT -> {
                 inv.setSelectedSlot(cachedSafeSlot);
-
-                client.getNetworkHandler().sendPacket(
-                        new UpdateSelectedSlotC2SPacket(inv.getSelectedSlot())
-                );
-
+                client.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(inv.getSelectedSlot()));
                 phaseTimer = Config.boostInterval;
                 phase = Phase.SPEAR_SLOT;
             }
-
             case SPEAR_SLOT -> {
                 inv.setSelectedSlot(cachedSpearSlot);
-
                 client.getNetworkHandler().sendPacket(
-                        new UpdateSelectedSlotC2SPacket(inv.getSelectedSlot())
+                        new UpdateSelectedSlotC2SPacket(cachedSpearSlot)
                 );
 
                 if (Config.delayBeforeHit <= 0) {
                     sendAttackPacket(client);
-                    phase = Phase.SAFE_SLOT;
+                    phase = Phase.HIT;
                 } else {
                     phaseTimer = Config.delayBeforeHit;
                     phase = Phase.HIT;
                 }
             }
-
             case HIT -> {
                 sendAttackPacket(client);
-                phase = Phase.SAFE_SLOT;
+
+                if (cachedReturnSlot != -1) {
+                    inv.setSelectedSlot(cachedReturnSlot);
+                    client.getNetworkHandler().sendPacket(
+                            new UpdateSelectedSlotC2SPacket(cachedReturnSlot)
+                    );
+                }
+
+                phaseTimer = Config.boostInterval;
+                phase = Phase.SPEAR_SLOT;
             }
         }
     }
@@ -112,6 +125,7 @@ public class BoostLogic {
         phaseTimer = 0;
         cachedSafeSlot = -1;
         cachedSpearSlot = -1;
+        cachedReturnSlot = -1;
     }
 
     private static int findspear(PlayerInventory inv) {
@@ -166,6 +180,36 @@ public class BoostLogic {
         }
 
         return fallback;
+    }
+
+    private static boolean isSafeSlot(PlayerInventory inv, int slot, int spearSlot) {
+        if (slot < 0 || slot > 8) return false;
+        if (slot == spearSlot) return false;
+
+        ItemStack stack = inv.getStack(slot);
+
+        if (stack.isEmpty()) return true;
+
+        if (stack.contains(DataComponentTypes.FOOD)) {
+            return false;
+        }
+
+        if (stack.getUseAction() != UseAction.NONE) {
+            return false;
+        }
+
+        AttributeModifiersComponent attributeModifiers = stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+
+        if (attributeModifiers != null) {
+            boolean hasAttackSpeed = attributeModifiers.modifiers().stream()
+                    .anyMatch(entry -> entry.attribute().equals(EntityAttributes.ATTACK_SPEED));
+
+            if (hasAttackSpeed) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static void sendAttackPacket(MinecraftClient client) {
